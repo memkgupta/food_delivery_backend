@@ -1,5 +1,6 @@
 package com.localbite_express.core.models.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonFilter("menuFilter")
 public class Menu {
     @Id
     @GeneratedValue

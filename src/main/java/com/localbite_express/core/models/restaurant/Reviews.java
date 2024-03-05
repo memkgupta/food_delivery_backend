@@ -23,5 +23,8 @@ public class Reviews {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "restaurant")
+    private Restaurant restaurant;
     private LocalDate timeStamp;
 }

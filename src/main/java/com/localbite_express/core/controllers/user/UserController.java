@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-    private static String[] USER_FILTER = {
+    private final static String[] USER_FILTER = {
             "name","email","id","phone","role"
     };
     private final UserRepository userRepository;
 //private final AuthenticationManager authenticationManager;
 
-    private UserService userService;
+
     @GetMapping("/me")
     public MappingJacksonValue me(){
        var auth = SecurityContextHolder.getContext().getAuthentication();
        User user = (User) auth.getPrincipal();
-User finalUser = (User) userRepository.findByEmail(user.getEmail()).orElseThrow();
+User finalUser = userRepository.findByEmail(user.getEmail()).orElseThrow();
         SimpleBeanPropertyFilter  filter= SimpleBeanPropertyFilter.filterOutAllExcept(USER_FILTER);
-        FilterProvider filterProvider = new SimpleFilterProvider().addFilter("UserDetails",filter);
+        FilterProvider filterProvider = new SimpleFilterProvider().addFilter("userFilter",filter);
         MappingJacksonValue response = new MappingJacksonValue(finalUser);
         response.setFilters(filterProvider);
         return response;

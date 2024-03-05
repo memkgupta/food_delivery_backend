@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
-@JsonFilter("UserDetails")
+@JsonFilter("userFilter")
 public class User implements UserDetails {
     @Id
     @GeneratedValue

@@ -1,5 +1,6 @@
 package com.localbite_express.core.models.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.localbite_express.core.models.Categories;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonFilter("menuItemFilter")
 public class MenuItem {
     @Id
     @GeneratedValue
@@ -27,6 +29,7 @@ public class MenuItem {
     @Enumerated(EnumType.STRING)
     private Categories category;
     private boolean availability;
+
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;

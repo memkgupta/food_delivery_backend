@@ -1,6 +1,7 @@
 package com.localbite_express.core.models.restaurant;
 
-import com.localbite_express.core.models.User;
+import com.fasterxml.jackson.annotation.JsonFilter;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,8 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
+@JsonFilter("restaurantFilter")
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,9 +20,7 @@ public class Restaurant {
     @Id
     @GeneratedValue
     private int id;
-
-
-    private User user;
+    private int user_id;
     private String name;
     private String description;
     private String address;
