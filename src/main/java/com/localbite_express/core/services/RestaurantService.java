@@ -1,7 +1,10 @@
 package com.localbite_express.core.services;
 
+import com.localbite_express.core.controllers.restaurant.requests.AddMenuItemRequest;
 import com.localbite_express.core.controllers.restaurant.requests.AddMenuRequest;
 import com.localbite_express.core.controllers.restaurant.requests.RegisterRestaurantRequest;
+import com.localbite_express.core.controllers.restaurant.requests.UpdateMenuItemRequest;
+import com.localbite_express.core.models.Role;
 import com.localbite_express.core.models.User;
 import com.localbite_express.core.models.restaurant.Menu;
 import com.localbite_express.core.models.restaurant.MenuItem;
@@ -9,6 +12,7 @@ import com.localbite_express.core.models.restaurant.Restaurant;
 import com.localbite_express.core.repositories.MenuItemRepository;
 import com.localbite_express.core.repositories.MenuRepository;
 import com.localbite_express.core.repositories.RestaurantRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +34,7 @@ public class RestaurantService {
             throw new Exception("Unauthorized");
         }
         User user = (User) authentication.getPrincipal();
+
             Restaurant restaurant = Restaurant.builder()
                     .name(request.getName())
                     .address(request.getAddress())
@@ -39,13 +44,23 @@ public class RestaurantService {
                     .longitude(request.getLongitude())
                     .user_id(user.getUserId())
                     .build();
-        return restaurantRepository.save(restaurant);
+            Restaurant restaurantSaved;
+            try {
+               restaurantSaved= restaurantRepository.save(restaurant);
+               user.setRole(Role.RESTAURANT_ADMIN);
+            }
+            catch (Exception e){
+                throw new Exception(e);
+            }
+        return restaurantSaved;
 
     }
 
     public Menu addMenu(AddMenuRequest addMenuRequest) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!authentication.isAuthenticated()){
+        var user = (User) authentication.getPrincipal();
+
+        if(!authentication.isAuthenticated()||!user.getRole().equals(Role.RESTAURANT_ADMIN)){
             throw new Exception("Unauthorized");
         }
         Restaurant restaurant = restaurantRepository.findById(addMenuRequest.getRestaurant_id()).orElseThrow();
@@ -61,5 +76,71 @@ public class RestaurantService {
         items=menuItemRepository.saveAll(addMenuRequest.getItems());
 menu.setMenuItems(items);
 return menuRepository.save(menu);
+    }
+    public MenuItem addMenuItem(AddMenuItemRequest request) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (User) authentication.getPrincipal();
+
+        if(!authentication.isAuthenticated()||!user.getRole().equals(Role.RESTAURANT_ADMIN)){
+            throw new Exception("Unauthorized");
+        }
+        Menu menu = menuRepository.findById(request.getMenu_id())
+                .orElseThrow(()-> new EntityNotFoundException("No Menu Found"));
+        Restaurant restaurant = menu.getRestaurant();
+        if(restaurant.getUser_id()!= user.getUserId()){
+            throw new Exception("Unauthorized");
+        }
+MenuItem menuItem = MenuItem.builder().menu(menu).availability(request.isAvailability())
+        .category(request.getCategory())
+        .description(request.getDescription())
+        .price(request.getPrice())
+        .preparationTime(request.getPreparationTime())
+        .name(request.getName())
+        .build();
+
+return menuItemRepository.save(menuItem);    }
+
+    public MenuItem updateMenuItem(UpdateMenuItemRequest request) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (User) authentication.getPrincipal();
+        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId()).orElseThrow(()-> new EntityNotFoundException("No Restaurant Found"));
+        if(restaurant.getUser_id()!= user.getUserId()){
+            throw new Exception("Unauthorized");
+        }
+        if(!authentication.isAuthenticated()||!user.getRole().equals(Role.RESTAURANT_ADMIN)){
+            throw new Exception("Unauthorized");
+        }
+        MenuItem item = menuItemRepository.findById(request.getMenu_item_id()).orElseThrow(()-> new EntityNotFoundException("No MenuItem Found"));
+        item.setName(request.getName());
+        item.setCategory(request.getCategory());
+        item.setDescription(request.getDescription());
+        item.setPrice(request.getPrice());
+        item.setPreparationTime(request.getPreparationTime());
+        return menuItemRepository.save(item);
+    }
+
+    public void deleteMenuItem(int id,int restaurant_id) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (User) authentication.getPrincipal();
+        Restaurant restaurant = restaurantRepository.findById(restaurant_id).orElseThrow(()-> new EntityNotFoundException("No Restaurant Found"));
+        if(restaurant.getUser_id()!= user.getUserId()){
+            throw new Exception("Unauthorized");
+        }
+        if(!authentication.isAuthenticated()||!(user.getRole().equals(Role.RESTAURANT_ADMIN))){
+            throw new Exception("Unauthorized");
+        }
+
+        MenuItem item = menuItemRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("No Menu Item Found"));
+
+        menuItemRepository.deleteById(id);
+    }
+
+    public Menu getMenu(int restaurantId) {
+       return menuRepository.findByRestaurantId(restaurantId).orElseThrow(()->new EntityNotFoundException("No Such Restaurant Found"));
+
+    }
+
+    public Restaurant findRestaurant(int id) {
+        return restaurantRepository.findById(id).orElseThrow();
     }
 }
