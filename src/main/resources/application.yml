@@ -14,3 +14,11 @@ spring:
         format_sql: true
     database: postgresql
     database-platform : org.hibernate.dialect.PostgreSQLDialect
+
+  web:
+    cors:
+      allowed-origins: "http://localhost:4200"
+      allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+      max-age: 3600
+      allowed-headers: "Requestor-Type"
+      exposed-headers: "X-Get-Header"

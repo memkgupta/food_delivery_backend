@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 public class Restaurant {
     @Id
     @GeneratedValue
@@ -27,6 +28,8 @@ public class Restaurant {
     private double latitude;
     private double longitude;
     private String contact_number;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    List<MenuItem> menuItems;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "menu", referencedColumnName = "id")
     private Menu menu;

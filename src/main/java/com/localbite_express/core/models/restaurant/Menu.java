@@ -19,8 +19,6 @@ public class Menu {
     @Id
     @GeneratedValue
     private int id;
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
-    List<MenuItem> menuItems;
-    @OneToOne(mappedBy = "menu")
-    private Restaurant restaurant;
+
+
 }

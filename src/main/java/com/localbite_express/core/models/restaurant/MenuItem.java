@@ -23,15 +23,16 @@ public class MenuItem {
     private String name;
     private String description;
     private int price;
-    @Enumerated(EnumType.STRING)
-    private TimeUnit preparationTime;
+
+    private long preparationTime;
     private int rating;
     @Enumerated(EnumType.STRING)
     private Categories category;
     private boolean availability;
-
     @ManyToOne
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
+    private int costPrice = 0;
+
 
 }

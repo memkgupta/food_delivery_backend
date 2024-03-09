@@ -17,8 +17,8 @@ public class UpdateMenuItemRequest {
     private String name;
     private String description;
     private int price;
-
-    private TimeUnit preparationTime;
+    private int costPrice;
+    private long preparationTime;
     private int restaurantId;
 
     private Categories category;

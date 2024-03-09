@@ -4,23 +4,27 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.localbite_express.core.models.User;
+import com.localbite_express.core.models.restaurant.Restaurant;
+import com.localbite_express.core.repositories.RestaurantRepository;
 import com.localbite_express.core.repositories.UserRepository;
 import com.localbite_express.core.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
     private final static String[] USER_FILTER = {
             "name","email","id","phone","role"
     };
     private final UserRepository userRepository;
+
 //private final AuthenticationManager authenticationManager;
 
 
