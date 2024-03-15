@@ -108,6 +108,7 @@ catch (Exception e){
 
     @DeleteMapping("/delete_menu_item")
     public ResponseEntity<?> deleteMenuItem(@RequestParam int id,@RequestParam int restaurant_id){
+        System.out.println("dddd");
         try{
             restaurantService.deleteMenuItem(id,restaurant_id);
             return ResponseEntity.ok("Menu Item deleted successfully");
@@ -164,7 +165,7 @@ catch (Exception e){
         Restaurant restaurant = restaurantService.findRestaurantByUserId(user.getUserId());
 
         String[] Restaurant_filter_string = {
-                "id","user_id","name","description","menu"
+                "id","user_id","name","description","menuItems"
         };
         SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept(Restaurant_filter_string);
         SimpleBeanPropertyFilter menuFilter = SimpleBeanPropertyFilter
@@ -179,4 +180,29 @@ catch (Exception e){
         response.setFilters(filterProvider);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/menu_item/{id}")
+    public ResponseEntity<?> getMenuItemById(@PathVariable int id){
+        try{
+            String[] fields = {
+                    "id",
+                    "name",
+                    "description",
+                    "price",
+                    "costPrice",
+                    "preparationTime",
+                    "rating",
+                    "category",
+                    "availability"
+            };
+            SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter.filterOutAllExcept(fields);
+            SimpleFilterProvider filterProvider = new SimpleFilterProvider().addFilter("menuItemFilter",simpleBeanPropertyFilter);
+            MappingJacksonValue res =new MappingJacksonValue(restaurantService.getMenuItem(id));
+            res.setFilters(filterProvider);
+            return ResponseEntity.ok(res);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
 }

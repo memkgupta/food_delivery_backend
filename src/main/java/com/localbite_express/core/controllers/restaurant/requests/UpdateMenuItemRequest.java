@@ -13,14 +13,12 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateMenuItemRequest {
-    private int menu_item_id;
+    private int id;
     private String name;
     private String description;
     private int price;
     private int costPrice;
     private long preparationTime;
-    private int restaurantId;
-
     private Categories category;
-
+   private int restaurant_id;
 }

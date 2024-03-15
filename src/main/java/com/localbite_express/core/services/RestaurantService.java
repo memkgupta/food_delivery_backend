@@ -106,22 +106,32 @@ MenuItem menuItem = MenuItem.builder().restaurant(restaurant).availability(reque
         .price(request.getPrice())
         .preparationTime(request.getPreparationTime())
         .name(request.getName())
+        .rating(request.getRating())
         .costPrice(request.getCostPrice())
         .build();
 
 return menuItemRepository.save(menuItem);    }
+    public MenuItem getMenuItem(int id) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (User) authentication.getPrincipal();
 
+        if(!authentication.isAuthenticated()||!user.getRole().equals(Role.RESTAURANT_ADMIN)){
+            throw new Exception("Unauthorized");
+        }
+        MenuItem menuItem = menuItemRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Menu Item Not Found"));
+        return menuItem;
+    }
     public MenuItem updateMenuItem(UpdateMenuItemRequest request) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (User) authentication.getPrincipal();
-        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId()).orElseThrow(()-> new EntityNotFoundException("No Restaurant Found"));
+        Restaurant restaurant = restaurantRepository.findById(request.getRestaurant_id()).orElseThrow(()-> new EntityNotFoundException("No Restaurant Found"));
         if(restaurant.getUser_id()!= user.getUserId()){
             throw new Exception("Unauthorized");
         }
         if(!authentication.isAuthenticated()||!user.getRole().equals(Role.RESTAURANT_ADMIN)){
             throw new Exception("Unauthorized");
         }
-        MenuItem item = menuItemRepository.findById(request.getMenu_item_id()).orElseThrow(()-> new EntityNotFoundException("No MenuItem Found"));
+        MenuItem item = menuItemRepository.findById(request.getId()).orElseThrow(()-> new EntityNotFoundException("No MenuItem Found"));
         item.setName(request.getName());
         item.setCategory(request.getCategory());
         item.setDescription(request.getDescription());
