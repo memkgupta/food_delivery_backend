@@ -23,6 +23,7 @@ public class InventoryTransaction {
     private InventoryItem item;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+
     private TransactionType transactionType;
     private int quantity;
     @Column(nullable = false)

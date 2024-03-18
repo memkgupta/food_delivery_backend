@@ -27,6 +27,6 @@ public class OrderItem {
     private int totalCost;
     private LocalDateTime time;
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "sale_id")
     private Sale sale;
 }

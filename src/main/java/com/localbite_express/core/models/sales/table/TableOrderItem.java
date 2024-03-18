@@ -5,6 +5,7 @@ import com.localbite_express.core.models.restaurant.MenuItem;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,9 @@ public class TableOrderItem {
     @Id
     @GeneratedValue
     private Long id;
+    @ManyToOne
     private TableOrder order;
+    @ManyToOne
     private MenuItem item;
     private int quantity;
 

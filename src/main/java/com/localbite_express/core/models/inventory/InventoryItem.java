@@ -26,8 +26,10 @@ public class InventoryItem {
     private int quantityOnHand;
     private int minimumStockLevel;
     private BigDecimal unitPrice;
+    @ManyToOne
     private Supplier supplier;
-    private Category category;
+@ManyToOne
+private Category category;
     private Duration shelfLife;
     private LocalDate expiryDate;
     private LocalDate refillDate;
@@ -42,20 +44,4 @@ COUNT,
 LENGTH,
 AREA,
 
-}
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-class Category{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String name;
-
-    private String description;
-    private Duration shelfLife;
 }

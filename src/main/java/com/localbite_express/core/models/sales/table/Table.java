@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "_table")
 @JsonFilter("tableFilter")
 public class Table {
     @Id
