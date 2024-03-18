@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +34,7 @@ public class MenuItem {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
     private int costPrice = 0;
+    private int currentStock =0;
 
 
 }
