@@ -48,7 +48,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             var isTokenValid = tokenRepository.findByToken(jwt).map(t->!t.isRevoked()&&!t.isExpired()).orElse(false);
             System.out.println(isTokenValid);
             if(jwtService.isTokenValid(jwt,userDetails)&&isTokenValid){
-                System.out.println("hello");
+
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);

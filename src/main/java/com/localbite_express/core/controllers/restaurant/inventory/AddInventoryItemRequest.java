@@ -1,7 +1,9 @@
-package com.localbite_express.core.models.inventory;
+package com.localbite_express.core.controllers.restaurant.inventory;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.localbite_express.core.models.restaurant.Restaurant;
+import com.localbite_express.core.models.inventory.Category;
+
+import com.localbite_express.core.models.inventory.Measures;
+import com.localbite_express.core.models.inventory.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.Duration;
 import java.time.LocalDate;
 
@@ -17,28 +18,19 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@JsonFilter("inventoryItemFilter")
-public class InventoryItem {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class AddInventoryItemRequest {
+
+
+    private int restaurant_id;
     private String name;
-    @Enumerated(EnumType.STRING)
+
     private Measures measures;
     private int quantityOnHand;
     private int minimumStockLevel;
     private BigDecimal unitPrice;
-    @ManyToOne
-    private Supplier supplier;
-@ManyToOne
-private Category category;
+    private int supplier_id;
+    private int category_id;
     private Duration shelfLife;
     private LocalDate expiryDate;
     private LocalDate refillDate;
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
-
 }
-

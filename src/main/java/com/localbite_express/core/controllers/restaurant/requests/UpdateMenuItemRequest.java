@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.concurrent.TimeUnit;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,4 +19,7 @@ public class UpdateMenuItemRequest {
     private long preparationTime;
     private Categories category;
    private int restaurant_id;
+   private boolean available;
+//   private List<Long> inventoryItems;
+
 }
